@@ -11,7 +11,6 @@ RUN mkdir /scripts/pre-exec.d && \
 mkdir /scripts/pre-init.d && \
 chmod -R 755 /scripts
 EXPOSE 80
-RUN mkdir /app
 # VOLUME /app
 WORKDIR /app
 RUN echo "<?php phpinfo() ?>" > /app/index.php
