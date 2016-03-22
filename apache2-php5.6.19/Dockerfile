@@ -4,7 +4,7 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 mkdir /app && chown -R apache:apache /app && \
 sed -i 's#^DocumentRoot ".*#DocumentRoot "/app"#g' /etc/apache2/httpd.conf && \
 sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf && \
-RUN echo "Success"
+echo "Success"
 RUN mkdir /scripts
 ADD scripts/run.sh /scripts/run.sh
 RUN mkdir /scripts/pre-exec.d && \
