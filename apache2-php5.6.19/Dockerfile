@@ -4,16 +4,16 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 mkdir /app && chown -R apache:apache /app && \
 sed -i 's#^DocumentRoot ".*#DocumentRoot "/app"#g' /etc/apache2/httpd.conf && \
 sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf && \
-echo "Success"
+RUN echo "Success"
+RUN mkdir /scripts
 ADD scripts/run.sh /scripts/run.sh
 RUN mkdir /scripts/pre-exec.d && \
 mkdir /scripts/pre-init.d && \
 chmod -R 755 /scripts
-
 EXPOSE 80
-
+RUN mkdir /app
 # VOLUME /app
 WORKDIR /app
 RUN echo "<?php phpinfo() ?>" > /app/index.php
-ENTRYPOINT ["/scripts/run.sh"]
+ENTRYPOINT ["/bin/sh" , "/scripts/run.sh"]
 
