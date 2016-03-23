@@ -1,18 +1,25 @@
-FROM vsenxx/alpine-git
-RUN apk --update add php-apache2 curl php-cli php-json php-phar php-openssl && rm -f /var/cache/apk/* && \
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-mkdir /app && chown -R apache:apache /app && \
-sed -i 's#^DocumentRoot ".*#DocumentRoot "/app"#g' /etc/apache2/httpd.conf && \
-sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf && \
-echo "Success"
+FROM vsenxx/alpine-git-apache-php:base
+
+RUN mkdir /run/apache2 && \
+mkdir /app/web && \
+mkdir /app/vhost && \
+chown -R apache:apache /app && \
+ln -s /app/vhost /etc/apache2/vhost
+ADD scripts/vhost.conf /app/vhost/vhost.conf
+
+
 RUN mkdir /scripts
+ADD scripts/httpd.conf /etc/apache2/httpd.conf
 ADD scripts/run.sh /scripts/run.sh
 RUN mkdir /scripts/pre-exec.d && \
 mkdir /scripts/pre-init.d && \
-chmod -R 755 /scripts
+chmod -R 777 /scripts
+
+
+RUN echo '<?php phpinfo();?>'>/app/web/index.php
 EXPOSE 80
-# VOLUME /app
+VOLUME /app
 WORKDIR /app
-RUN echo "<?php phpinfo() ?>" > /app/index.php
 ENTRYPOINT ["/bin/sh" , "/scripts/run.sh"]
+
 
