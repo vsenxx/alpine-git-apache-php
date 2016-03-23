@@ -4,6 +4,7 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 mkdir /app && chown -R apache:apache /app && \
 sed -i 's#^DocumentRoot ".*#DocumentRoot "/app"#g' /etc/apache2/httpd.conf && \
 sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf && \
+sed -i 's##ServerName www.example.com:80#ServerName localhost:80#' /etc/apache2/httpd.conf && \
 echo "Success"
 WORKDIR /app
 
