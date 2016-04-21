@@ -1,6 +1,7 @@
 #!/bin/sh
 # execute any pre-init scripts, useful for images
 # based on this image
+
 for i in /scripts/pre-init.d/*sh
 do
         if [ -e "${i}" ]; then
@@ -25,6 +26,9 @@ do
              ."${i}"
         fi
 done
+set -e
+# Apache gets grumpy about PID files pre-existing
+rm -f /run/apache2/httpd.pid
 
 echo "[i] Starting daemon..."
 # run apache httpd daemon
